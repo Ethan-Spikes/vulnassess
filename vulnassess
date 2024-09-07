@@ -1,0 +1,76 @@
+#!/bin/bash
+
+Root_Check() { #good
+
+	user=$(whoami)
+	if [ $user != root ]; then
+		echo 'Permission denied. Please run as root.'
+		echo ' '
+		exit
+	fi
+
+}
+
+Tools_Update() { #Function Included
+
+	if [ $T_Update == 'y' ]; then
+		
+		echo "Beginning tools update"
+		echo " "
+		sudo apt -y update
+		sudo apt -y install nmap lynis searchsploit
+		sudo apt -y upgrade nmap lynis searchsploit
+		sudo apt -y autoremove
+		sudo apt -y autoclean
+		sudo searchsploit -u
+		sudo nmap --script-updatedb
+		echo "tools fully installed and updated"
+		echo " "
+		
+	fi
+
+		
+}
+
+External_Audit() {
+
+	echo "beginning external audit"
+	echo ' '
+	nmap -sC -sV -p- 127.0.0.1
+	echo "external audit complete"
+	echo ' '
+	
+}
+
+Internal_Audit() {
+
+	echo "beginning internal audit"
+	echo ' '
+	lynis audit system
+	echo "internal audit complete"
+	echo ' '
+
+}
+
+
+Main() {
+
+
+	Root_Check
+	echo "This script will update nmap and lynis if able. Continue?(y/n)"
+	echo ' '
+	read answer
+	if [ $answer == 'n' ];then
+		echo "terminating script."
+		exit
+	fi
+	Tools_Update
+	External_Audit
+	Internal_Audit
+	
+	echo "script complete"
+	exit
+
+}
+
+Main
