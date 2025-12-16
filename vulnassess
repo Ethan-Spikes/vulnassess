@@ -23,7 +23,7 @@ Tools_Update() { #Function Included
 		sudo apt -y autoremove
 		sudo apt -y autoclean
 		sudo searchsploit -u
-		sudo nmap --script-updatedb
+		#sudo nmap --script-updatedb
 		echo "tools fully installed and updated"
 		echo " "
 		
@@ -36,8 +36,8 @@ External_Audit() {
 
 	echo "beginning external audit"
 	echo ' '
-	nmap -sC -sV -p- 127.0.0.1
-	echo "external audit complete"
+	#nmap -sC -sV -p- 127.0.0.1
+	echo "This functionality has been disabled. From a seperate box, run nmap -sC -sV -p- (your ip address) from another box for these results."
 	echo ' '
 	
 }
@@ -60,11 +60,9 @@ Main() {
 	echo "This script will update nmap and lynis if able. Continue?(y/n)"
 	echo ' '
 	read answer
-	if [ $answer == 'n' ];then
-		echo "terminating script."
-		exit
+	if [ $answer == 'y' ];then
+		Tools_Update
 	fi
-	Tools_Update
 	External_Audit
 	Internal_Audit
 	
